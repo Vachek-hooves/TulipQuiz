@@ -1,4 +1,11 @@
-import IntroScreen from "./IntroScreen";
+import IntroScreen from './IntroScreen';
+import TulipsCaringScreen from './TulipsCaringScreen';
+import TulipsTypesScreen from './TulipsTypesScreen';
+import TulipFestivalScreen from './TulipFestivalScreen';
 
-export {IntroScreen};
-    
+export {
+  IntroScreen,
+  TulipsCaringScreen,
+  TulipsTypesScreen,
+  TulipFestivalScreen,
+};
