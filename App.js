@@ -32,7 +32,7 @@ const TabNavigator = () => {
             left: 5,
             right: 5,
             borderRadius: 15,
-            height: 100,
+            height: 110,
             overflow: 'hidden', // This ensures the image doesn't overflow the rounded corners
             paddingTop:20
           },
@@ -51,7 +51,7 @@ const TabNavigator = () => {
             // marginBottom: 5,
             justifyContent:'center',
             alignItems:'center',
-            height:100
+            height:110
           },
           tabBarActiveTintColor: '#FFFFFF', // White color for active tab
           tabBarInactiveTintColor: '#E0E0E0', // Light grey color for inactive tabs
