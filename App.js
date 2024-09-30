@@ -5,44 +5,57 @@ import {NavigationContainer} from '@react-navigation/native';
 import {IntroScreen} from './screen/stack';
 import {AboutTulipsScreen,QuizWelcomeScreen,} from './screen/tab';
 import {TulipFestivalScreen,TulipsCaringScreen,TulipsTypesScreen} from './screen/stack';
-
+import { Image, View } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
   return (
-    <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
-        animation: 'fade',
-        animationDuration: 1000,
-        tabBarStyle: {
-          backgroundColor: '#4CAF50', // Green color similar to grass
-          borderTopWidth: 0,
-          elevation: 8, // Android shadow
-          shadowColor: '#000',
-          shadowOffset: { width: 0, height: -3 },
-          shadowOpacity: 0.3,
-          shadowRadius: 4,
-          position: 'absolute',
-          bottom: 16,
-          left: 16,
-          right: 16,
-          borderRadius: 15,
-          height: 60,
-        },
-        tabBarItemStyle: {
-          marginTop: 5,
-          marginBottom: 5,
-        },
-        tabBarActiveTintColor: '#FFFFFF', // White color for active tab
-        tabBarInactiveTintColor: '#E0E0E0', // Light grey color for inactive tabs
-      }}
-    >
-      <Tab.Screen name="AboutTulips" component={AboutTulipsScreen} /> 
-      <Tab.Screen name="QuizWelcomeScreen" component={QuizWelcomeScreen} />
-    </Tab.Navigator>
+    <View style={{ flex: 1 }}>
+      <Tab.Navigator
+        screenOptions={{
+          headerShown: false,
+          animation: 'fade',
+          animationDuration: 1000,
+          tabBarStyle: {
+            backgroundColor: 'transparent',
+            borderTopWidth: 0,
+            elevation: 8, // Android shadow
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: -3 },
+            shadowOpacity: 0.3,
+            shadowRadius: 4,
+            position: 'absolute',
+            bottom: 0,
+            left: 5,
+            right: 5,
+            borderRadius: 15,
+            height: 100,
+            overflow: 'hidden', // This ensures the image doesn't overflow the rounded corners
+          },
+          tabBarBackground: () => (
+            <Image
+              source={require('./assets/img/tulipGrow/tabGrass.png')}
+              style={{
+                flex: 1,
+                width: '100%',
+                resizeMode: 'cover',
+              }}
+            />
+          ),
+          tabBarItemStyle: {
+            marginTop: 5,
+            marginBottom: 5,
+          },
+          tabBarActiveTintColor: '#FFFFFF', // White color for active tab
+          tabBarInactiveTintColor: '#E0E0E0', // Light grey color for inactive tabs
+        }}
+      >
+        <Tab.Screen name="AboutTulips" component={AboutTulipsScreen} /> 
+        <Tab.Screen name="QuizWelcomeScreen" component={QuizWelcomeScreen} />
+      </Tab.Navigator>
+    </View>
   );
 };
 
