@@ -4,7 +4,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import {IntroScreen} from './screen/stack';
 import {AboutTulipsScreen,QuizWelcomeScreen,TulipFarmScreen ,GrowTulipScreen} from './screen/tab';
-import {TulipFestivalScreen,TulipsCaringScreen,TulipsTypesScreen} from './screen/stack';
+import {TulipFestivalScreen,TulipsCaringScreen,TulipsTypesScreen,QuizGameScreen } from './screen/stack';
 import { Image, View } from 'react-native';
 
 const Stack = createNativeStackNavigator();
@@ -58,8 +58,7 @@ const TabNavigator = () => {
         }}
       >
         <Tab.Screen name="AboutTulips" component={AboutTulipsScreen} /> 
-        {/* <Tab.Screen name="QuizWelcomeScreen" component={QuizWelcomeScreen} /> */}
-        
+        <Tab.Screen name="QuizWelcomeScreen" component={QuizWelcomeScreen} />
         <Tab.Screen name="GrowTulipScreen" component={GrowTulipScreen} />
       </Tab.Navigator>
     </View>
@@ -78,6 +77,7 @@ function App() {
           <Stack.Screen name="TulipsCaringScreen" component={TulipsCaringScreen} />
           <Stack.Screen name="TulipsTypesScreen" component={TulipsTypesScreen} />
              <Stack.Screen name="TulipFarmScreen" component={TulipFarmScreen} />
+             <Stack.Screen name="QuizGameScreen" component={QuizGameScreen} />    
         </Stack.Navigator>
       </NavigationContainer>
     </TulipProvider>
