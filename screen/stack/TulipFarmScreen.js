@@ -1,7 +1,7 @@
 import { ImageBackground, StyleSheet, View, Dimensions } from "react-native";
 import Land from '../../components/ui/icons/Land';  
 import DarkTulip from '../../components/ui/icons/DarkTulip';
-
+import IconGoBack from '../../components/ui/icons/IconGoBack';
 const { width: screenWidth } = Dimensions.get('window');
 const GRID_SIZE = 3;
 const LAND_SIZE = screenWidth / GRID_SIZE;
@@ -18,6 +18,7 @@ const TulipFarmScreen = () => {
         ))
        }
       </View>
+      <IconGoBack />
     </ImageBackground>
   );
 };
