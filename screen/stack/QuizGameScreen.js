@@ -1,48 +1,165 @@
-import React from "react";
-import { StyleSheet, Text, View,ImageBackground } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Text, View, TouchableOpacity, Image, Animated, ScrollView } from "react-native";
 import { useTulipContext } from "../../store/context";
+import LinearGradient from 'react-native-linear-gradient';
 
-const QuizGameScreen = ({ route }) => {
+const QuizGameScreen = ({ route, navigation }) => {
   const { quizId } = route.params;
   const { quizData } = useTulipContext();
+  const [currentQuiz, setCurrentQuiz] = useState(null);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [score, setScore] = useState(0);
+  const [showResult, setShowResult] = useState(false);
 
-  const currentQuiz = quizData.find(quiz => quiz.id === quizId);
+  useEffect(() => {
+    const quiz = quizData.find(q => q.id === quizId);
+    setCurrentQuiz(quiz);
+  }, [quizId, quizData]);
+
+  const handleAnswer = (selectedAnswer) => {
+    const currentQuestion = currentQuiz.questions[currentQuestionIndex];
+    if (selectedAnswer === currentQuestion.answer) {
+      setScore(score + 1);
+    }
+
+    if (currentQuestionIndex + 1 < currentQuiz.questions.length) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
+    } else {
+      setShowResult(true);
+    }
+  };
+
+  const restartQuiz = () => {
+    setCurrentQuestionIndex(0);
+    setScore(0);
+    setShowResult(false);
+  };
 
   if (!currentQuiz) {
     return (
       <View style={styles.container}>
-        <Text>Quiz not found</Text>
+        <Text>Loading quiz...</Text>
       </View>
     );
   }
 
+  const currentQuestion = currentQuiz.questions[currentQuestionIndex];
+
   return (
-    <ImageBackground source={require('../../assets/img/bg/vase.jpg')} style={styles.container}>
-      <Text style={styles.title}>{currentQuiz.title}</Text>
-      <Text style={styles.subtitle}>{currentQuiz.questions.length} Questions</Text>
-      {/* Add more quiz game logic here */}
-    </ImageBackground>
+    <LinearGradient colors={['#FF6B6B', '#4ECDC4']} style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <Text style={styles.quizTitle}>{currentQuiz.title}</Text>
+        
+        {showResult ? (
+          <View style={styles.resultContainer}>
+            <Text style={styles.resultTitle}>Quiz Complete!</Text>
+            <Text style={styles.resultScore}>
+              Your score: {score} / {currentQuiz.questions.length}
+            </Text>
+            <Image
+              source={require('../../assets/img/bg/vase.jpg')}
+              style={styles.resultImage}
+            />
+            <TouchableOpacity style={styles.restartButton} onPress={restartQuiz}>
+              <Text style={styles.restartButtonText}>Restart Quiz</Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View style={styles.questionContainer}>
+            <Text style={styles.questionText}>{currentQuestion.question}</Text>
+            {currentQuestion.options.map((option, index) => (
+              <TouchableOpacity
+                key={index}
+                style={styles.optionButton}
+                onPress={() => handleAnswer(option)}
+              >
+                <Text style={styles.optionText}>{option}</Text>
+              </TouchableOpacity>
+            ))}
+            <Text style={styles.progressText}>
+              Question {currentQuestionIndex + 1} of {currentQuiz.questions.length}
+            </Text>
+          </View>
+        )}
+      </ScrollView>
+    </LinearGradient>
   );
 };
-
-export default QuizGameScreen;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 16,
   },
-  title: {
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    padding: 20,
+  },
+  quizTitle: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 8,
+    color: "#FFFFFF",
+    marginBottom: 20,
     textAlign: "center",
   },
-  subtitle: {
+  questionContainer: {
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    borderRadius: 10,
+    padding: 20,
+    width: "100%",
+  },
+  questionText: {
     fontSize: 18,
-    color: "#666",
-    marginBottom: 16,
+    fontWeight: "bold",
+    marginBottom: 15,
+    textAlign: "center",
+  },
+  optionButton: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 8,
+    padding: 15,
+    marginBottom: 10,
+  },
+  optionText: {
+    fontSize: 16,
+    textAlign: "center",
+  },
+  progressText: {
+    fontSize: 14,
+    color: "#333",
+    textAlign: 'center',
+    marginTop: 10,
+  },
+  resultContainer: {
+    alignItems: "center",
+  },
+  resultTitle: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "#FFFFFF",
+    marginBottom: 20,
+  },
+  resultScore: {
+    fontSize: 22,
+    color: "#FFFFFF",
+    marginBottom: 30,
+  },
+  resultImage: {
+    width: 200,
+    height: 200,
+    resizeMode: "contain",
+    marginBottom: 30,
+  },
+  restartButton: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 8,
+    padding: 15,
+  },
+  restartButtonText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#FF6B6B",
   },
 });
+
+export default QuizGameScreen;
