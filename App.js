@@ -15,6 +15,7 @@ const TabNavigator = () => {
     <View style={{ flex: 1 }}>
       <Tab.Navigator
         screenOptions={{
+          title:'',
           headerShown: false,
           animation: 'fade',
           animationDuration: 1000,
@@ -33,6 +34,7 @@ const TabNavigator = () => {
             borderRadius: 15,
             height: 100,
             overflow: 'hidden', // This ensures the image doesn't overflow the rounded corners
+            paddingTop:20
           },
           tabBarBackground: () => (
             <Image
