@@ -47,8 +47,11 @@ const TabNavigator = () => {
             />
           ),
           tabBarItemStyle: {
-            marginTop: 5,
-            marginBottom: 5,
+            // marginTop: 5,
+            // marginBottom: 5,
+            justifyContent:'center',
+            alignItems:'center',
+            height:100
           },
           tabBarActiveTintColor: '#FFFFFF', // White color for active tab
           tabBarInactiveTintColor: '#E0E0E0', // Light grey color for inactive tabs
