@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Image, Animated, ScrollView } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView } from "react-native";
 import { useTulipContext } from "../../store/context";
 import LinearGradient from 'react-native-linear-gradient';
 import QuizLayout from "../../components/ScreenLayout/QuizLayout";
+
 const QuizGameScreen = ({ route, navigation }) => {
   const { quizId } = route.params;
   const { quizData } = useTulipContext();
@@ -46,9 +47,11 @@ const QuizGameScreen = ({ route, navigation }) => {
   const currentQuestion = currentQuiz.questions[currentQuestionIndex];
 
   return (
-    <LinearGradient colors={['#FF6B6B', '#4ECDC4']} style={styles.container}>
     <QuizLayout>
-
+      <LinearGradient 
+        colors={['rgba(255, 107, 107, 0.6)', 'rgba(78, 205, 196, 0.7)']} 
+        style={styles.gradientOverlay}
+      />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <Text style={styles.quizTitle}>{currentQuiz.title}</Text>
         
@@ -85,7 +88,6 @@ const QuizGameScreen = ({ route, navigation }) => {
         )}
       </ScrollView>
     </QuizLayout>
-    </LinearGradient>
   );
 };
 
@@ -105,6 +107,9 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     marginBottom: 20,
     textAlign: "center",
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: {width: -1, height: 1},
+    textShadowRadius: 10
   },
   questionContainer: {
     backgroundColor: "rgba(255, 255, 255, 0.9)",
@@ -163,6 +168,14 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     color: "#FF6B6B",
+  },
+  gradientOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    // height: 200, // Adjust this value to control how far down the gradient extends
+   height:'100%'
   },
 });
 
