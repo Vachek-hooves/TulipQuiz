@@ -12,7 +12,7 @@ const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator screenOptions={{headerShown: false,animation:'fade',animationDuration:1000}}>
       <Tab.Screen name="AboutTulips" component={AboutTulipsScreen} /> 
       <Tab.Screen name="QuizWelcomeScreen" component={QuizWelcomeScreen} />
     </Tab.Navigator>
@@ -24,7 +24,7 @@ function App() {
   return (
     <TulipProvider>
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{headerShown: false}}>
+        <Stack.Navigator screenOptions={{headerShown: false,animation:'fade',animationDuration:1000}}>
           <Stack.Screen name="Intro" component={IntroScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
           <Stack.Screen name="TulipFestivalsScreen" component={TulipFestivalScreen} />

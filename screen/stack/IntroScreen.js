@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, Animated } from "react-native";
 import React, { useEffect, useRef } from "react";
 import MainLayout from "../../components/ScreenLayout/MainLayout";
 
-const IntroScreen = () => {
+const IntroScreen = ({navigation}) => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnims = useRef("Welcome".split('').map(() => new Animated.Value(0))).current;
 
@@ -24,7 +24,15 @@ const IntroScreen = () => {
         useNativeDriver: true,
       })
     ]).start();
-  }, []);
+
+    // Navigate to TabNavigator after 2 seconds
+    const timer = setTimeout(() => {
+      navigation.navigate('TabNavigator');
+    }, 2300);
+
+    // Clear the timer when the component unmounts
+    return () => clearTimeout(timer);
+  }, [navigation]);
 
   return (
     <MainLayout>
