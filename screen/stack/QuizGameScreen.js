@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     flexGrow: 1,
-    justifyContent: 'center',
+    // justifyContent: 'center',
     padding: 20,
   },
   quizTitle: {
@@ -112,16 +112,22 @@ const styles = StyleSheet.create({
     textShadowRadius: 10
   },
   questionContainer: {
-    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
     borderRadius: 10,
     padding: 20,
     width: "100%",
+    
   },
   questionText: {
-    fontSize: 18,
-    fontWeight: "bold",
+    fontSize: 23,
+    fontWeight: "700",
     marginBottom: 15,
     textAlign: "center",
+    color:'#FFFFFF',
+    height:110,
+    color:'green',
+    lineHeight:32,
+    letterSpacing:0.5
   },
   optionButton: {
     backgroundColor: "#FFFFFF",
