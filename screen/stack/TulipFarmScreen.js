@@ -41,6 +41,6 @@ const styles = StyleSheet.create({
   land: {
     width: LAND_SIZE,
     height: LAND_SIZE,
-    
+    // transform: [{rotate: '45deg'}]
   },
 });

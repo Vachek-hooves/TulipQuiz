@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
   tulip: {
     width: 30,
     height: 50,
-    tintColor: 'black'
+    tintColor: 'black',
+    // transform: [{rotate: '-45deg'}]
   }
 });

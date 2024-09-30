@@ -28,14 +28,8 @@ const styles = StyleSheet.create({
     },
     image: {
         width: '100%',
-        height: '70%',
-        // resizeMode: 'cover',
-    },
-    contentContainer: {
-        position: 'absolute',
-        width: '100%',
         height: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-    }
+        resizeMode: 'contain',
+    },
+   
 });
