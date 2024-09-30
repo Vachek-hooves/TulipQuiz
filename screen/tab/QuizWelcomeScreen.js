@@ -36,6 +36,7 @@ const QuizWelcomeScreen = () => {
           </TouchableOpacity>
         ))}
       </ScrollView>
+     <View style={{height:80}}></View>
     </TabLayout>
   );
 };
@@ -92,4 +93,5 @@ const styles = StyleSheet.create({
   lockText: {
     fontSize: 32,
   },
+ 
 });

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, Image, Animated, ScrollView } from "react-native";
 import { useTulipContext } from "../../store/context";
 import LinearGradient from 'react-native-linear-gradient';
-
+import QuizLayout from "../../components/ScreenLayout/QuizLayout";
 const QuizGameScreen = ({ route, navigation }) => {
   const { quizId } = route.params;
   const { quizData } = useTulipContext();
@@ -47,6 +47,8 @@ const QuizGameScreen = ({ route, navigation }) => {
 
   return (
     <LinearGradient colors={['#FF6B6B', '#4ECDC4']} style={styles.container}>
+    <QuizLayout>
+
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <Text style={styles.quizTitle}>{currentQuiz.title}</Text>
         
@@ -59,7 +61,7 @@ const QuizGameScreen = ({ route, navigation }) => {
             <Image
               source={require('../../assets/img/bg/vase.jpg')}
               style={styles.resultImage}
-            />
+              />
             <TouchableOpacity style={styles.restartButton} onPress={restartQuiz}>
               <Text style={styles.restartButtonText}>Restart Quiz</Text>
             </TouchableOpacity>
@@ -69,9 +71,9 @@ const QuizGameScreen = ({ route, navigation }) => {
             <Text style={styles.questionText}>{currentQuestion.question}</Text>
             {currentQuestion.options.map((option, index) => (
               <TouchableOpacity
-                key={index}
-                style={styles.optionButton}
-                onPress={() => handleAnswer(option)}
+              key={index}
+              style={styles.optionButton}
+              onPress={() => handleAnswer(option)}
               >
                 <Text style={styles.optionText}>{option}</Text>
               </TouchableOpacity>
@@ -82,6 +84,7 @@ const QuizGameScreen = ({ route, navigation }) => {
           </View>
         )}
       </ScrollView>
+    </QuizLayout>
     </LinearGradient>
   );
 };
@@ -89,6 +92,7 @@ const QuizGameScreen = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    
   },
   scrollContainer: {
     flexGrow: 1,

@@ -1,14 +1,20 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { StyleSheet, Text, View,ImageBackground } from "react-native";
 
-const QuizLayout = () => {
+const QuizLayout = ({children}) => {
   return (
-    <View>
-      <Text>QuizLayout</Text>
-    </View>
+    <ImageBackground source={require('../../assets/img/bg/vase.jpg')} style={styles.background}>
+      {children}
+    </ImageBackground>
   );
 };
 
 export default QuizLayout;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    background:{
+        flex:1,
+        resizeMode:'cover',
+        justifyContent:'center',
+        
+    }
+});
