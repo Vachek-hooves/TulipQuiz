@@ -1,5 +1,6 @@
 import { ImageBackground, StyleSheet, View, Dimensions } from "react-native";
-import Land from '../../components/ui/icons/Land';
+import Land from '../../components/ui/icons/Land';  
+import DarkTulip from '../../components/ui/icons/DarkTulip';
 
 const { width: screenWidth } = Dimensions.get('window');
 const GRID_SIZE = 3;
@@ -11,7 +12,9 @@ const TulipFarmScreen = () => {
       <View style={styles.farmGrid}>
        {
         Array.from({length: 9}).map((_, index) => (
-          <Land key={index} style={styles.land} />
+          <Land key={index} style={styles.land}>
+            <DarkTulip />
+          </Land>
         ))
        }
       </View>
@@ -38,5 +41,6 @@ const styles = StyleSheet.create({
   land: {
     width: LAND_SIZE,
     height: LAND_SIZE,
+    
   },
 });

@@ -1,15 +1,18 @@
-import { Image, StyleSheet, TouchableOpacity } from "react-native";
+import { ImageBackground, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 
 const Land = ({ style, children }) => {
   return (  
     <TouchableOpacity style={style}>
-      <Image 
+      <ImageBackground 
         source={require('../../../assets/img/tulipGrow/land.png')} 
-        style={[styles.icon, style]}
+        style={styles.icon}
+        imageStyle={styles.image}
       >
-        {children}
-      </Image>
+     
+          {children}
+   
+      </ImageBackground>
     </TouchableOpacity>
   );
 };
@@ -20,6 +23,19 @@ const styles = StyleSheet.create({
     icon: {
         width: '100%',
         height: '100%',
-        resizeMode: 'contain',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    image: {
+        width: '100%',
+        height: '70%',
+        // resizeMode: 'cover',
+    },
+    contentContainer: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 });
