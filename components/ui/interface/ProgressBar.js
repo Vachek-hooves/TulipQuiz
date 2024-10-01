@@ -35,7 +35,7 @@ const ProgressBar = ({ progress }) => {
 
 const styles = StyleSheet.create({
   container: {
-    height: 10,
+    height: 15,
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
     borderRadius: 5,
     overflow: 'hidden',
