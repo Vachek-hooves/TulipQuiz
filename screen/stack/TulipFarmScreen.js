@@ -30,7 +30,7 @@ const TulipFarmScreen = () => {
       setPlantedTulips(newPlantedTulips);
       setModalVisible(false);
     } else {
-      alert("Not enough points to buy this tulip!");
+      alert("Not enough points to get this tulip!");
     }
   };
 
