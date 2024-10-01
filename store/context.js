@@ -39,6 +39,18 @@ export const TulipProvider = ({ children }) => {
     }
   };
 
+  const updateTotalScore = async (newScore) => {
+    const updatedQuizData = quizData.map((quiz, index) => 
+      index === 0 ? { ...quiz, levelScore: newScore } : quiz
+    );
+    setQuizData(updatedQuizData);
+    try {
+      await AsyncStorage.setItem('TulipQuiz', JSON.stringify(updatedQuizData));
+    } catch (error) {
+      console.error('Error saving updated quiz data:', error);
+    }
+  };
+
   const getTotalScore = () => {
     if (!quizData) return 0;
     console.log('Quiz Data:', quizData); // Debug log
@@ -59,6 +71,7 @@ export const TulipProvider = ({ children }) => {
     updateQuizScore,
     getTotalScore,
     getMaxPossibleScore,
+    updateTotalScore, // Add this new method
   };
 
   return (
