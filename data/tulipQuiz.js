@@ -4,6 +4,7 @@ export const TulipQuiz = [
     id: 1,
     isLocked: false,
     title: "General Knowledge About the Netherlands",
+    levelScore: 0,
     questions: [
       {
         question: "What is the capital of the Netherlands?",
@@ -62,6 +63,7 @@ export const TulipQuiz = [
     id: 2,
     isLocked: true,
     title: "History of the Netherlands",
+    levelScore: 0,
     questions: [
       {
         question: "When did the Netherlands gain independence?",
@@ -120,6 +122,7 @@ export const TulipQuiz = [
     id: 3,
     isLocked: true,
     title: "Culture of the Netherlands",
+    levelScore: 0,
     questions: [
       {
         question: "What is the famous Dutch celebration in April?",
@@ -178,6 +181,7 @@ export const TulipQuiz = [
     id: 4,
     isLocked: true,
     title: "Geography of the Netherlands",
+    levelScore: 0,
     questions: [
       {
         question: "Which body of water borders the Netherlands to the north?",
@@ -236,6 +240,7 @@ export const TulipQuiz = [
     id: 5,
     isLocked: true,
     title: "Famous Landmarks and Attractions in the Netherlands",
+    levelScore: 0,
     questions: [
       {
         question: "What museum is famous for its collection of Van Gogh paintings?",
@@ -294,6 +299,7 @@ export const TulipQuiz = [
     isLocked: true,
     title: "Economy of the Netherlands",
     image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGHAHXhoMytyqOauBwzgwqv0TD55OiSOBhkA&s',
+    levelScore: 0,
     questions: [
       {
         question: "What sector is the main one in the economy of the Netherlands?",
@@ -352,6 +358,7 @@ export const TulipQuiz = [
     isLocked: true,
     title: "Nature of the Netherlands",
     image: 'https://scx2.b-cdn.net/gfx/news/hires/2022/netherlands.jpg',
+    levelScore: 0,
     questions: [
       {
         question: "Which of these animals is a symbol of the Netherlands?",
