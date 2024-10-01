@@ -4,6 +4,7 @@ import { useTulipContext } from "../../store/context";
 import LinearGradient from 'react-native-linear-gradient';
 import QuizLayout from "../../components/ScreenLayout/QuizLayout";
 
+
 const { width } = Dimensions.get('window');
 
 const QuizGameScreen = ({ route, navigation }) => {
@@ -99,6 +100,8 @@ const QuizGameScreen = ({ route, navigation }) => {
   const currentQuestion = currentQuiz.questions[currentQuestionIndex];
   const remainingQuestions = currentQuiz.questions.length - currentQuestionIndex - 1;
 
+  const progress = ((currentQuestionIndex + 1) / currentQuiz.questions.length) * 100;
+
   return (
     <QuizLayout>
       <LinearGradient 
@@ -107,6 +110,13 @@ const QuizGameScreen = ({ route, navigation }) => {
       />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <Text style={styles.quizTitle}>{currentQuiz.title}</Text>
+        
+        <View style={styles.progressBarContainer}>
+          <ProgressBar progress={progress} />
+          <Text style={styles.progressText}>
+            Question {currentQuestionIndex + 1} of {currentQuiz.questions.length}
+          </Text>
+        </View>
         
         {showResult ? (
           <View style={styles.resultContainer}>
@@ -134,8 +144,8 @@ const QuizGameScreen = ({ route, navigation }) => {
                   {lastAnswerCorrect ? "Correct!" : "Incorrect!"}
                 </Text>
               )}
-              <Text style={styles.progressText}>
-                Correct: {score} | Remaining: {remainingQuestions}
+              <Text style={styles.scoreText}>
+                Score: {score} / {currentQuiz.questions.length}
               </Text>
             </View>
           </>
@@ -144,6 +154,24 @@ const QuizGameScreen = ({ route, navigation }) => {
     </QuizLayout>
   );
 };
+
+const ProgressBar = ({ progress }) => {
+  return (
+    <View style={{ height: 10,
+      backgroundColor: 'rgba(255, 255, 255, 0.3)',
+      borderRadius: 5,
+      overflow: 'hidden',}}>
+      <LinearGradient
+        colors={['#FF6B6B', '#4ECDC4']}
+        start={{x: 0, y: 0}}
+        end={{x: 1, y: 0}}
+        style={[styles.progressBar, { width: `${progress}%` }]}
+      />
+    </View>
+  );
+};
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -264,6 +292,25 @@ const styles = StyleSheet.create({
     color: '#F44336',
   },
   progressText: {
+    fontSize: 16,
+    color: '#FFFFFF',
+    textAlign: 'center',
+  },
+  progressBar: {
+    height: '100%',
+    borderRadius: 5,
+  },
+  progressBarContainer: {
+    marginBottom: 20,
+    width: '100%',
+  },
+  progressText: {
+    fontSize: 14,
+    color: '#FFFFFF',
+    textAlign: 'center',
+    marginTop: 5,
+  },
+  scoreText: {
     fontSize: 16,
     color: '#FFFFFF',
     textAlign: 'center',
