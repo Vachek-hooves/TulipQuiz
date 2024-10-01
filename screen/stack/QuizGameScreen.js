@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, Dimensions } from "react-native";
 import { useTulipContext } from "../../store/context";
 import LinearGradient from 'react-native-linear-gradient';
 import QuizLayout from "../../components/ScreenLayout/QuizLayout";
+
+const { width } = Dimensions.get('window');
 
 const QuizGameScreen = ({ route, navigation }) => {
   const { quizId } = route.params;
@@ -11,29 +13,79 @@ const QuizGameScreen = ({ route, navigation }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
+  const [lastAnswerCorrect, setLastAnswerCorrect] = useState(null);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
 
   useEffect(() => {
     const quiz = quizData.find(q => q.id === quizId);
     setCurrentQuiz(quiz);
   }, [quizId, quizData]);
 
-  const handleAnswer = (selectedAnswer) => {
+  const handleAnswer = (selected) => {
     const currentQuestion = currentQuiz.questions[currentQuestionIndex];
-    if (selectedAnswer === currentQuestion.answer) {
+    const isCorrect = selected === currentQuestion.answer;
+    
+    setSelectedAnswer(selected);
+    setLastAnswerCorrect(isCorrect);
+
+    if (isCorrect) {
       setScore(score + 1);
     }
 
-    if (currentQuestionIndex + 1 < currentQuiz.questions.length) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-    } else {
-      setShowResult(true);
+    setTimeout(() => {
+      if (currentQuestionIndex + 1 < currentQuiz.questions.length) {
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
+        setSelectedAnswer(null);
+        setLastAnswerCorrect(null);
+      } else {
+        setShowResult(true);
+      }
+    }, 1500);
+  };
+
+  const renderOptionButton = (option) => {
+    const isSelected = option === selectedAnswer;
+    const isCorrect = option === currentQuiz.questions[currentQuestionIndex].answer;
+    
+    let gradientColors = ['#FF6B6B', '#4ECDC4'];
+    let textColor = '#333';
+
+    if (isSelected) {
+      if (isCorrect) {
+        gradientColors = ['#4CAF50', '#45a049'];
+        textColor = '#4CAF50';
+      } else {
+        gradientColors = ['#F44336', '#d32f2f'];
+        textColor = '#F44336';
+      }
     }
+
+    return (
+      <TouchableOpacity
+        key={option}
+        onPress={() => handleAnswer(option)}
+        disabled={selectedAnswer !== null}
+      >
+        <LinearGradient
+          colors={gradientColors}
+          start={{x: 0, y: 0}}
+          end={{x: 1, y: 0}}
+          style={styles.optionGradientBorder}
+        >
+          <View style={styles.optionButton}>
+            <Text style={[styles.optionText, { color: textColor }]}>{option}</Text>
+          </View>
+        </LinearGradient>
+      </TouchableOpacity>
+    );
   };
 
   const restartQuiz = () => {
     setCurrentQuestionIndex(0);
     setScore(0);
     setShowResult(false);
+    setLastAnswerCorrect(null);
+    setSelectedAnswer(null);
   };
 
   if (!currentQuiz) {
@@ -45,6 +97,7 @@ const QuizGameScreen = ({ route, navigation }) => {
   }
 
   const currentQuestion = currentQuiz.questions[currentQuestionIndex];
+  const remainingQuestions = currentQuiz.questions.length - currentQuestionIndex - 1;
 
   return (
     <QuizLayout>
@@ -64,27 +117,28 @@ const QuizGameScreen = ({ route, navigation }) => {
             <Image
               source={require('../../assets/img/bg/vase.jpg')}
               style={styles.resultImage}
-              />
+            />
             <TouchableOpacity style={styles.restartButton} onPress={restartQuiz}>
               <Text style={styles.restartButtonText}>Restart Quiz</Text>
             </TouchableOpacity>
           </View>
         ) : (
-          <View style={styles.questionContainer}>
-            <Text style={styles.questionText}>{currentQuestion.question}</Text>
-            {currentQuestion.options.map((option, index) => (
-              <TouchableOpacity
-              key={index}
-              style={styles.optionButton}
-              onPress={() => handleAnswer(option)}
-              >
-                <Text style={styles.optionText}>{option}</Text>
-              </TouchableOpacity>
-            ))}
-            <Text style={styles.progressText}>
-              Question {currentQuestionIndex + 1} of {currentQuiz.questions.length}
-            </Text>
-          </View>
+          <>
+            <View style={styles.questionContainer}>
+              <Text style={styles.questionText}>{currentQuestion.question}</Text>
+              {currentQuestion.options.map((option) => renderOptionButton(option))}
+            </View>
+            <View style={styles.feedbackContainer}>
+              {lastAnswerCorrect !== null && (
+                <Text style={[styles.feedbackText, lastAnswerCorrect ? styles.correctAnswer : styles.incorrectAnswer]}>
+                  {lastAnswerCorrect ? "Correct!" : "Incorrect!"}
+                </Text>
+              )}
+              <Text style={styles.progressText}>
+                Correct: {score} | Remaining: {remainingQuestions}
+              </Text>
+            </View>
+          </>
         )}
       </ScrollView>
     </QuizLayout>
@@ -129,15 +183,26 @@ const styles = StyleSheet.create({
     lineHeight:32,
     letterSpacing:0.5
   },
+  optionGradientBorder: {
+    borderRadius: 15,
+    padding: 3, // Increased from 2 to 3
+    marginBottom: 15,
+    width: width * 0.9, // 90% of screen width for better responsiveness
+    alignSelf: 'center',
+  },
   optionButton: {
     backgroundColor: "#FFFFFF",
-    borderRadius: 8,
+    borderRadius: 12, // Slightly reduced to maintain the overall shape
     padding: 15,
-    marginBottom: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 50, // Ensure a minimum height for better touch targets
   },
   optionText: {
     fontSize: 16,
     textAlign: "center",
+    color: '#333',
+    fontWeight: '600', // Added for better readability
   },
   progressText: {
     fontSize: 14,
@@ -182,6 +247,26 @@ const styles = StyleSheet.create({
     right: 0,
     // height: 200, // Adjust this value to control how far down the gradient extends
    height:'100%'
+  },
+  feedbackContainer: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  feedbackText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  correctAnswer: {
+    color: '#4CAF50',
+  },
+  incorrectAnswer: {
+    color: '#F44336',
+  },
+  progressText: {
+    fontSize: 16,
+    color: '#FFFFFF',
+    textAlign: 'center',
   },
 });
 
