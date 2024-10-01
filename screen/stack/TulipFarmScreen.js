@@ -12,8 +12,8 @@ const LAND_SIZE = screenWidth / GRID_SIZE;
 const TulipFarmScreen = () => {
   return (
     <ImageBackground source={require('../../assets/img/tulipGrow/grass.jpg')} style={styles.background}>
-        <SafeAreaView></SafeAreaView>
-      <View style={styles.overlay}>
+        <SafeAreaView ></SafeAreaView>
+      {/* <View style={styles.overlay}> */}
         <View style={styles.header}>
           <TotalScoreDisplay />
         </View>
@@ -25,7 +25,7 @@ const TulipFarmScreen = () => {
           ))}
         </View>
         <IconGoBack style={styles.backIcon} />
-      </View>
+      {/* </View> */}
     </ImageBackground>
   );
 };
