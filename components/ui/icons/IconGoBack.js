@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
     icon:{
         width: 40,
         height: 40,
+        tintColor: '#FFFFFF',
     },
     iconContainer:{
         position: 'absolute',

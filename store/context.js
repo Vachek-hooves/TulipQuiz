@@ -39,9 +39,26 @@ export const TulipProvider = ({ children }) => {
     }
   };
 
+  const getTotalScore = () => {
+    if (!quizData) return 0;
+    console.log('Quiz Data:', quizData); // Debug log
+    return quizData.reduce((total, quiz) => {
+      console.log(`Quiz ${quiz.id} score:`, quiz.levelScore); // Debug log
+      const score = Number(quiz.levelScore) || 0; // Convert to number, use 0 if NaN
+      return total + score;
+    }, 0);
+  };
+
+  const getMaxPossibleScore = () => {
+    if (!quizData) return 0;
+    return quizData.reduce((total, quiz) => total + (quiz.questions.length * 10), 0);
+  };
+
   const value = {
     quizData,
     updateQuizScore,
+    getTotalScore,
+    getMaxPossibleScore,
   };
 
   return (

@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, Dimensions
 import { useTulipContext } from "../../store/context";
 import LinearGradient from 'react-native-linear-gradient';
 import QuizLayout from "../../components/ScreenLayout/QuizLayout";
+import IconGoBack from "../../components/ui/icons/IconGoBack";
 import ProgressBar from "../../components/ui/interface/ProgressBar";
 
 const { width } = Dimensions.get('window');
@@ -174,6 +175,7 @@ const QuizGameScreen = ({ route, navigation }) => {
           </>
         )}
       </ScrollView>
+      <IconGoBack/>
     </QuizLayout>
   );
 };
