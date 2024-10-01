@@ -27,8 +27,21 @@ export const TulipProvider = ({ children }) => {
     loadQuizData();
   }, []);
 
+  const updateQuizScore = async (quizId, newScore) => {
+    const updatedQuizData = quizData.map(quiz => 
+      quiz.id === quizId ? { ...quiz, levelScore: newScore } : quiz
+    );
+    setQuizData(updatedQuizData);
+    try {
+      await AsyncStorage.setItem('TulipQuiz', JSON.stringify(updatedQuizData));
+    } catch (error) {
+      console.error('Error saving updated quiz data:', error);
+    }
+  };
+
   const value = {
     quizData,
+    updateQuizScore,
   };
 
   return (

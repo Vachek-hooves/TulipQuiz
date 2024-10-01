@@ -26,7 +26,10 @@ const QuizWelcomeScreen = () => {
             <Image source={{ uri: quiz.image }} style={styles.quizImage} />
             <View style={styles.quizInfo}>
               <Text style={styles.quizTitle}>{quiz.title}</Text>
-              <Text style={styles.quizQuestions}>{quiz.questions.length} Questions</Text>
+              <View style={styles.quizStats}>
+                <Text style={styles.quizQuestions}>{quiz.questions.length} Questions</Text>
+                <Text style={styles.quizScore}>Score: {quiz.levelScore}/{quiz.questions.length * 10}</Text>
+              </View>
             </View>
             {quiz.isLocked && (
               <View style={styles.lockOverlay}>
@@ -36,12 +39,10 @@ const QuizWelcomeScreen = () => {
           </TouchableOpacity>
         ))}
       </ScrollView>
-     <View style={{height:80}}></View>
+      <View style={{height:80}}></View>
     </TabLayout>
   );
 };
-
-export default QuizWelcomeScreen;
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -77,9 +78,19 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 8,
   },
+  quizStats: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   quizQuestions: {
     fontSize: 14,
     color: "#666",
+  },
+  quizScore: {
+    fontSize: 14,
+    color: "#666",
+    fontWeight: "bold",
   },
   lockedQuiz: {
     opacity: 0.7,
@@ -95,3 +106,5 @@ const styles = StyleSheet.create({
   },
  
 });
+
+export default QuizWelcomeScreen;

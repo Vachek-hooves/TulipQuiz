@@ -9,7 +9,7 @@ const { width } = Dimensions.get('window');
 
 const QuizGameScreen = ({ route, navigation }) => {
   const { quizId } = route.params;
-  const { quizData } = useTulipContext();
+  const { quizData, updateQuizScore } = useTulipContext();
   const [currentQuiz, setCurrentQuiz] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -38,7 +38,7 @@ const QuizGameScreen = ({ route, navigation }) => {
     setLastAnswerCorrect(isCorrect);
 
     if (isCorrect) {
-      setScore(score + 1);
+      setScore(prevScore => prevScore + 10);
     }
 
     setTimeout(() => {
@@ -48,6 +48,7 @@ const QuizGameScreen = ({ route, navigation }) => {
         setLastAnswerCorrect(null);
       } else {
         setShowResult(true);
+        updateQuizScore(quizId, score + (isCorrect ? 10 : 0));
       }
     }, 1500);
   };
@@ -97,6 +98,10 @@ const QuizGameScreen = ({ route, navigation }) => {
     setSelectedAnswer(null);
   };
 
+  const navigateToQuizMenu = () => {
+    navigation.navigate("QuizWelcomeScreen");
+  };
+
   if (!currentQuiz) {
     return (
       <View style={styles.container}>
@@ -129,15 +134,25 @@ const QuizGameScreen = ({ route, navigation }) => {
         {showResult ? (
           <View style={styles.resultContainer}>
             <Text style={styles.resultTitle}>Quiz Complete!</Text>
-            <Text style={styles.resultScore}>
-              Your score: {score} / {currentQuiz.questions.length}
-            </Text>
+            <View style={styles.scoreContainer}>
+              <View style={styles.scoreItem}>
+                <Text style={styles.scoreLabel}>Your Score:</Text>
+                <Text style={styles.scoreValue}>{score}</Text>
+              </View>
+              <View style={styles.scoreItem}>
+                <Text style={styles.scoreLabel}>Total Questions:</Text>
+                <Text style={styles.scoreValue}>{currentQuiz.questions.length}</Text>
+              </View>
+            </View>
             <Image
               source={require('../../assets/img/bg/vase.jpg')}
               style={styles.resultImage}
             />
             <TouchableOpacity style={styles.restartButton} onPress={restartQuiz}>
               <Text style={styles.restartButtonText}>Restart Quiz</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.quizMenuButton} onPress={navigateToQuizMenu}>
+              <Text style={styles.quizMenuButtonText}>Quiz Menu</Text>
             </TouchableOpacity>
           </View>
         ) : (
@@ -153,7 +168,7 @@ const QuizGameScreen = ({ route, navigation }) => {
                 </Text>
               )}
               <Text style={styles.scoreText}>
-                Score: {score} / {currentQuiz.questions.length}
+                Score: {score} / {currentQuiz.questions.length * 10}
               </Text>
             </View>
           </>
@@ -252,11 +267,24 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderRadius: 8,
     padding: 15,
+    marginBottom: 10,
   },
   restartButtonText: {
     fontSize: 18,
     fontWeight: "bold",
     color: "#FF6B6B",
+    textAlign: 'center',
+  },
+  quizMenuButton: {
+    backgroundColor: "#4ECDC4",
+    borderRadius: 8,
+    padding: 15,
+  },
+  quizMenuButtonText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#FFFFFF",
+    textAlign: 'center',
   },
   gradientOverlay: {
     position: 'absolute',
@@ -295,6 +323,24 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#FFFFFF',
     textAlign: 'center',
+  },
+  scoreContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 20,
+  },
+  scoreItem: {
+    alignItems: 'center',
+  },
+  scoreLabel: {
+    fontSize: 16,
+    color: '#FFFFFF',
+    marginBottom: 5,
+  },
+  scoreValue: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
   },
 });
 
