@@ -57,10 +57,10 @@ const QuizWelcomeScreen = () => {
                 <Text style={styles.unlockText}>Tap to unlock (150 points)</Text>
               </View>
             )}
-            {unlockedQuizId === quiz.id && (
-              <View style={styles.unlockedOverlay}>
-                <Text style={styles.unlockedText}>Unlocked!</Text>
-              </View>
+            {unlockedQuizId === quiz.id && (<></>
+              // <View style={styles.unlockedOverlay}>
+              //   <Text style={styles.unlockedText}>Unlocked!</Text>
+              // </View>
             )}
           </TouchableOpacity>
         ))}
