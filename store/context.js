@@ -85,8 +85,8 @@ export const TulipProvider = ({ children }) => {
     const newPlantedTulips = plantedTulips.map(tulip => {
       if (tulip) {
         const elapsedTime = (Date.now() - tulip.plantedAt) / (1000 * 60); // time in minutes
-        const growthStages = Math.min(Math.floor(elapsedTime / 2), 4); // 0.1 growth every 2 minutes, max 4 stages
-        const newScale = Math.min(0.6 + (growthStages * 0.1), 1.0);
+        const growthProgress = Math.min(elapsedTime / 8, 1); // 8 minutes to fully grow
+        const newScale = 0.6 + (growthProgress * 0.4); // Scale from 0.6 to 1.0
         return { ...tulip, scale: newScale };
       }
       return tulip;
