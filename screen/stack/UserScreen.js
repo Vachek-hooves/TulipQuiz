@@ -9,6 +9,7 @@ const UserScreen = () => {
   const [name, setName] = useState('');
   const [image, setImage] = useState(null);
   const [userExists, setUserExists] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     loadUserData();
@@ -35,9 +36,15 @@ const UserScreen = () => {
         await AsyncStorage.setItem('userImage', image);
       }
       setUserExists(true);
+      setIsEditing(false);
     } catch (error) {
       console.error('Error saving user data:', error);
     }
+  };
+
+  const updateUserData = async () => {
+    await saveUserData();
+    setIsEditing(false);
   };
 
   const selectImage = () => {
@@ -65,13 +72,27 @@ const UserScreen = () => {
     }
   };
 
+  const toggleEdit = () => {
+    setIsEditing(!isEditing);
+  };
+
   return (
     <TabLayout blur={20}>
       <View style={styles.container}>
-        {userExists ? (
+        {userExists && !isEditing ? (
           <View style={styles.userInfo}>
             <Image source={{ uri: image }} style={styles.userImage} />
             <Text style={styles.userName}>{name}</Text>
+            <TouchableOpacity onPress={toggleEdit}>
+              <LinearGradient
+                colors={['#FF6B6B', '#4ECDC4']}
+                start={{x: 0, y: 0}}
+                end={{x: 1, y: 0}}
+                style={styles.gradientButton}
+              >
+                <Text style={styles.buttonText}>Edit</Text>
+              </LinearGradient>
+            </TouchableOpacity>
             <TouchableOpacity onPress={resetUserData}>
               <LinearGradient
                 colors={['#FF6B6B', '#4ECDC4']}
@@ -106,16 +127,28 @@ const UserScreen = () => {
               onChangeText={setName}
               placeholderTextColor="white"
             />
-            <TouchableOpacity onPress={saveUserData}>
+            <TouchableOpacity onPress={isEditing ? updateUserData : saveUserData}>
               <LinearGradient
                 colors={['#FF6B6B', '#4ECDC4']}
                 start={{x: 0, y: 0}}
                 end={{x: 1, y: 0}}
                 style={styles.gradientButton}
               >
-                <Text style={styles.buttonText}>Save</Text>
+                <Text style={styles.buttonText}>{isEditing ? 'Update' : 'Save'}</Text>
               </LinearGradient>
             </TouchableOpacity>
+            {isEditing && (
+              <TouchableOpacity onPress={toggleEdit}>
+                <LinearGradient
+                  colors={['#FF6B6B', '#4ECDC4']}
+                  start={{x: 0, y: 0}}
+                  end={{x: 1, y: 0}}
+                  style={styles.gradientButton}
+                >
+                  <Text style={styles.buttonText}>Cancel</Text>
+                </LinearGradient>
+              </TouchableOpacity>
+            )}
             <TouchableOpacity onPress={resetUserData}>
               <LinearGradient
                 colors={['#FF6B6B', '#4ECDC4']}
@@ -153,7 +186,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   userName: {
-    fontSize: 24,
+    fontSize: 32,
     fontWeight: 'bold',
   },
   inputContainer: {
