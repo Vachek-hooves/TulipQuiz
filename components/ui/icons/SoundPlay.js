@@ -6,13 +6,14 @@ const SoundPlay = ({play}) => {
     <View
       style={{
         padding: 10,
-        backgroundColor: !play ? 'pink' : null,
+        backgroundColor: !play ? 'pink' : 'white',
         borderRadius: 22,
         // position: 'absolute',
         // top: 60,
         // left: 60,
         justifyContent: 'center',
         alignItems: 'center',
+        overflow:'hidden'
       }}>
       <Image
         source={require('../../../assets/img/icons/molody.png')}
@@ -20,6 +21,7 @@ const SoundPlay = ({play}) => {
           width: 40,
           height: 40,
           tintColor: !play ? 'green' : 'red',
+          transform:[{scale:1.4}]
         }}
       />
     </View>

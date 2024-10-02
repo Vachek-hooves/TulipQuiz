@@ -23,9 +23,9 @@ const Control = () => {
     <View style={styles.container}>
       <TouchableOpacity onPress={handleToggleSound}>
         {offState ? (
-          <SoundPlay isPlay={offState} />
+          <SoundPlay play={offState} />
         ) : (
-          <SoundPlay isPlay={offState} />
+          <SoundPlay play={offState} />
         )}
       </TouchableOpacity>
     </View>
