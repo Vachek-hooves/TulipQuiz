@@ -94,6 +94,18 @@ export const TulipProvider = ({ children }) => {
     updatePlantedTulips(newPlantedTulips);
   };
 
+  const unlockQuiz = async (quizId) => {
+    const updatedQuizData = quizData.map(quiz => 
+      quiz.id === quizId ? { ...quiz, isLocked: false } : quiz
+    );
+    setQuizData(updatedQuizData);
+    try {
+      await AsyncStorage.setItem('TulipQuiz', JSON.stringify(updatedQuizData));
+    } catch (error) {
+      console.error('Error saving updated quiz data:', error);
+    }
+  };
+
   const value = {
     quizData,
     updateQuizScore,
@@ -103,6 +115,7 @@ export const TulipProvider = ({ children }) => {
     plantedTulips,
     updatePlantedTulips,
     growTulips,
+    unlockQuiz,
   };
 
   return (

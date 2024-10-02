@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, Dimensions } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, Dimensions, Alert } from "react-native";
 import { useTulipContext } from "../../store/context";
 import LinearGradient from 'react-native-linear-gradient';
 import QuizLayout from "../../components/ScreenLayout/QuizLayout";
@@ -10,7 +10,7 @@ const { width } = Dimensions.get('window');
 
 const QuizGameScreen = ({ route, navigation }) => {
   const { quizId } = route.params;
-  const { quizData, updateQuizScore } = useTulipContext();
+  const { quizData, updateQuizScore, unlockQuiz } = useTulipContext();
   const [currentQuiz, setCurrentQuiz] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -18,6 +18,7 @@ const QuizGameScreen = ({ route, navigation }) => {
   const [lastAnswerCorrect, setLastAnswerCorrect] = useState(null);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [progress, setProgress] = useState(0);
+  const [correctAnswers, setCorrectAnswers] = useState(0);
 
   useEffect(() => {
     const quiz = quizData.find(q => q.id === quizId);
@@ -40,6 +41,7 @@ const QuizGameScreen = ({ route, navigation }) => {
 
     if (isCorrect) {
       setScore(prevScore => prevScore + 10);
+      setCorrectAnswers(prev => prev + 1);
     }
 
     setTimeout(() => {
@@ -49,7 +51,17 @@ const QuizGameScreen = ({ route, navigation }) => {
         setLastAnswerCorrect(null);
       } else {
         setShowResult(true);
-        updateQuizScore(quizId, score + (isCorrect ? 10 : 0));
+        const finalScore = score + (isCorrect ? 10 : 0);
+        updateQuizScore(quizId, finalScore);
+        
+        // Check if more than 9 questions were answered correctly
+        if (correctAnswers + (isCorrect ? 1 : 0) > 9) {
+          const nextQuizIndex = quizData.findIndex(q => q.id === quizId) + 1;
+          if (nextQuizIndex < quizData.length && quizData[nextQuizIndex].isLocked) {
+            unlockQuiz(quizData[nextQuizIndex].id);
+            Alert.alert("Congratulations!", "You've unlocked the next quiz!");
+          }
+        }
       }
     }, 1500);
   };

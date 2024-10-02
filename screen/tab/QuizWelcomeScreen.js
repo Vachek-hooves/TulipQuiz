@@ -1,15 +1,27 @@
-import React from "react";
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image } from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import TabLayout from "../../components/ScreenLayout/TabLayout";
 import { useTulipContext } from "../../store/context";
 
 const QuizWelcomeScreen = () => {
   const navigation = useNavigation();
-  const { quizData } = useTulipContext();
+  const { quizData, getTotalScore, unlockQuiz } = useTulipContext();
+  const [unlockedQuizId, setUnlockedQuizId] = useState(null);
 
   const handleQuizPress = (quizId) => {
     navigation.navigate("QuizGameScreen", { quizId });
+  };
+
+  const handleUnlockQuiz = (quizId) => {
+    const totalScore = getTotalScore();
+    if (totalScore >= 150) {
+      unlockQuiz(quizId);
+      setUnlockedQuizId(quizId);
+      Alert.alert("Quiz Unlocked!", "You've successfully unlocked this quiz.");
+    } else {
+      Alert.alert("Not Enough Points", `You need 150 points to unlock this quiz. Current score: ${totalScore}`);
+    }
   };
 
   return (
@@ -20,8 +32,7 @@ const QuizWelcomeScreen = () => {
           <TouchableOpacity
             key={quiz.id}
             style={[styles.quizButton, quiz.isLocked && styles.lockedQuiz]}
-            onPress={() => handleQuizPress(quiz.id)}
-            disabled={quiz.isLocked}
+            onPress={() => quiz.isLocked ? handleUnlockQuiz(quiz.id) : handleQuizPress(quiz.id)}
           >
             <Image source={{ uri: quiz.image }} style={styles.quizImage} />
             <View style={styles.quizInfo}>
@@ -34,6 +45,12 @@ const QuizWelcomeScreen = () => {
             {quiz.isLocked && (
               <View style={styles.lockOverlay}>
                 <Text style={styles.lockText}>🔒</Text>
+                <Text style={styles.unlockText}>Tap to unlock (150 points)</Text>
+              </View>
+            )}
+            {unlockedQuizId === quiz.id && (
+              <View style={styles.unlockedOverlay}>
+                <Text style={styles.unlockedText}>Unlocked!</Text>
               </View>
             )}
           </TouchableOpacity>
@@ -104,7 +121,23 @@ const styles = StyleSheet.create({
   lockText: {
     fontSize: 32,
   },
- 
+  unlockText: {
+    color: '#fff',
+    fontSize: 14,
+    textAlign: 'center',
+    marginTop: 8,
+  },
+  unlockedOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(76, 175, 80, 0.7)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  unlockedText: {
+    color: '#fff',
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
 });
 
 export default QuizWelcomeScreen;
