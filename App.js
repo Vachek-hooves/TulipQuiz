@@ -32,7 +32,7 @@ const TabNavigator = () => {
             left: 5,
             right: 5,
             borderRadius: 15,
-            height: 110,
+            height: 140,
             overflow: 'hidden', // This ensures the image doesn't overflow the rounded corners
             paddingTop:20
           },
@@ -57,9 +57,27 @@ const TabNavigator = () => {
           tabBarInactiveTintColor: '#E0E0E0', // Light grey color for inactive tabs
         }}
       >
-        <Tab.Screen name="AboutTulips" component={AboutTulipsScreen} /> 
-        <Tab.Screen name="QuizWelcomeScreen" component={QuizWelcomeScreen} />
-        <Tab.Screen name="GrowTulipScreen" component={GrowTulipScreen} />
+        <Tab.Screen name="AboutTulips" component={AboutTulipsScreen} options={{
+tabBarIcon:({color, size,focused}) => (
+  <Image source={require('./assets/img/icons/tabIcon/about.png')} style={{ width:focused?110: 80, height: focused?110: 80 }} />
+)
+        }}
+         
+        /> 
+        <Tab.Screen name="QuizWelcomeScreen" component={QuizWelcomeScreen} 
+        options={{
+          tabBarIcon:({color, size,focused}) => (
+            <Image source={require('./assets/img/icons/tabIcon/quiz.png')} style={{ width:focused?120: 80, height: focused?120: 80 }} />
+          )
+        }}
+        />
+        <Tab.Screen name="GrowTulipScreen" component={GrowTulipScreen} 
+        options={{
+          tabBarIcon:({color, size,focused}) => (
+            <Image source={require('./assets/img/icons/tabIcon/farm.png')} style={{ width:focused?90: 65, height: focused?110: 80 }} />
+          )
+        }}
+        />
       </Tab.Navigator>
     </View>
   );
