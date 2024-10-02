@@ -47,8 +47,8 @@ export default UserIcon;
 
 const styles = StyleSheet.create({
     button: {
-        width: 50,
-        height: 50,
+        width: 60,
+        height: 60,
         borderRadius: 25,
         justifyContent: 'center',
         alignItems: 'center',
