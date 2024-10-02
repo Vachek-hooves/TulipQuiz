@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, Alert } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, Alert, SafeAreaView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import TabLayout from "../../components/ScreenLayout/TabLayout";
 import { useTulipContext } from "../../store/context";
@@ -8,16 +8,21 @@ const QuizWelcomeScreen = () => {
   const navigation = useNavigation();
   const { quizData, getTotalScore, unlockQuiz } = useTulipContext();
   const [unlockedQuizId, setUnlockedQuizId] = useState(null);
+  const [totalScore, setTotalScore] = useState(0);
+
+  useEffect(() => {
+    setTotalScore(getTotalScore());
+  }, [getTotalScore]);
 
   const handleQuizPress = (quizId) => {
     navigation.navigate("QuizGameScreen", { quizId });
   };
 
   const handleUnlockQuiz = (quizId) => {
-    const totalScore = getTotalScore();
     if (totalScore >= 150) {
       unlockQuiz(quizId);
       setUnlockedQuizId(quizId);
+      setTotalScore(prevScore => prevScore - 150);
       Alert.alert("Quiz Unlocked!", "You've successfully unlocked this quiz.");
     } else {
       Alert.alert("Not Enough Points", `You need 150 points to unlock this quiz. Current score: ${totalScore}`);
@@ -26,6 +31,10 @@ const QuizWelcomeScreen = () => {
 
   return (
     <TabLayout blur={100}>
+      <SafeAreaView></SafeAreaView>
+      <View style={styles.totalScoreContainer}>
+        <Text style={styles.totalScoreText}>Total Score: {totalScore}</Text>
+      </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <Text style={styles.title}>Quiz Levels</Text>
         {quizData && quizData.map((quiz) => (
@@ -62,6 +71,17 @@ const QuizWelcomeScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  totalScoreContainer: {
+    backgroundColor: '#4ECDC4',
+    padding: 10,
+    alignItems: 'center',
+    marginBottom:10
+  },
+  totalScoreText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+  },
   scrollContainer: {
     padding: 16,
   },
