@@ -13,8 +13,7 @@ const LAND_SIZE = screenWidth / GRID_SIZE;
 const TulipFarmScreen = () => {
   const [selectedLand, setSelectedLand] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [plantedTulips, setPlantedTulips] = useState(Array(9).fill(null));
-  const { getTotalScore, updateQuizScore } = useTulipContext();
+  const { getTotalScore, updateQuizScore, plantedTulips, updatePlantedTulips } = useTulipContext();
 
   const handleLandPress = (index) => {
     setSelectedLand(index);
@@ -27,10 +26,10 @@ const TulipFarmScreen = () => {
       updateQuizScore(1, currentScore - tulip.price);
       const newPlantedTulips = [...plantedTulips];
       newPlantedTulips[selectedLand] = { ...tulip, plantedAt: Date.now() };
-      setPlantedTulips(newPlantedTulips);
+      updatePlantedTulips(newPlantedTulips);
       setModalVisible(false);
     } else {
-      alert("Not enough points to get this tulip!");
+      alert("Not enough points to buy this tulip!");
     }
   };
 
@@ -41,7 +40,7 @@ const TulipFarmScreen = () => {
       updateQuizScore(1, getTotalScore() + harvestValue);
       const newPlantedTulips = [...plantedTulips];
       newPlantedTulips[index] = null;
-      setPlantedTulips(newPlantedTulips);
+      updatePlantedTulips(newPlantedTulips);
     }
   };
 

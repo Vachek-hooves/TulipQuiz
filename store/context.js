@@ -6,25 +6,33 @@ export const TulipContext = createContext({});
 
 export const TulipProvider = ({ children }) => {
   const [quizData, setQuizData] = useState(null);
+  const [plantedTulips, setPlantedTulips] = useState(Array(9).fill(null));
 
   useEffect(() => {
-    const loadQuizData = async () => {
+    const loadData = async () => {
       try {
-        const storedData = await AsyncStorage.getItem('TulipQuiz');
-        if (storedData !== null) {
-          setQuizData(JSON.parse(storedData));
+        const [storedQuizData, storedPlantedTulips] = await Promise.all([
+          AsyncStorage.getItem('TulipQuiz'),
+          AsyncStorage.getItem('PlantedTulips')
+        ]);
+
+        if (storedQuizData !== null) {
+          setQuizData(JSON.parse(storedQuizData));
         } else {
-          // If no stored data, use the default TulipQuiz and save it
           setQuizData(TulipQuiz);
           await AsyncStorage.setItem('TulipQuiz', JSON.stringify(TulipQuiz));
         }
+
+        if (storedPlantedTulips !== null) {
+          setPlantedTulips(JSON.parse(storedPlantedTulips));
+        }
       } catch (error) {
-        console.error('Error loading quiz data:', error);
-        setQuizData(TulipQuiz); // Fallback to default data if there's an error
+        console.error('Error loading data:', error);
+        setQuizData(TulipQuiz);
       }
     };
 
-    loadQuizData();
+    loadData();
   }, []);
 
   const updateQuizScore = async (quizId, newScore) => {
@@ -53,10 +61,8 @@ export const TulipProvider = ({ children }) => {
 
   const getTotalScore = () => {
     if (!quizData) return 0;
-    console.log('Quiz Data:', quizData); // Debug log
     return quizData.reduce((total, quiz) => {
-      console.log(`Quiz ${quiz.id} score:`, quiz.levelScore); // Debug log
-      const score = Number(quiz.levelScore) || 0; // Convert to number, use 0 if NaN
+      const score = Number(quiz.levelScore) || 0;
       return total + score;
     }, 0);
   };
@@ -66,12 +72,23 @@ export const TulipProvider = ({ children }) => {
     return quizData.reduce((total, quiz) => total + (quiz.questions.length * 10), 0);
   };
 
+  const updatePlantedTulips = async (newPlantedTulips) => {
+    setPlantedTulips(newPlantedTulips);
+    try {
+      await AsyncStorage.setItem('PlantedTulips', JSON.stringify(newPlantedTulips));
+    } catch (error) {
+      console.error('Error saving planted tulips data:', error);
+    }
+  };
+
   const value = {
     quizData,
     updateQuizScore,
     getTotalScore,
     getMaxPossibleScore,
-    updateTotalScore, // Add this new method
+    updateTotalScore,
+    plantedTulips,
+    updatePlantedTulips,
   };
 
   return (
