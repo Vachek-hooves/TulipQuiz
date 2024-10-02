@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { launchImageLibrary } from 'react-native-image-picker';
 import TabLayout from '../../components/ScreenLayout/TabLayout';
 import LinearGradient from 'react-native-linear-gradient';
+import { IconGoBack } from '../../components/ui/icons';
 
 const UserScreen = () => {
   const [name, setName] = useState('');
@@ -161,6 +162,7 @@ const UserScreen = () => {
             </TouchableOpacity>
           </View>
         )}
+        <IconGoBack />
       </View>
     </TabLayout>
   );
@@ -189,6 +191,7 @@ const styles = StyleSheet.create({
     fontSize: 46,
     fontWeight: '800',
     letterSpacing: 1,
+    color: '#FF6B6B'
     
   },
   inputContainer: {
