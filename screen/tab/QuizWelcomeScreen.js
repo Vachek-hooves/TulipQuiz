@@ -92,7 +92,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   quizButton: {
-    backgroundColor: "#ffffff",
+    // backgroundColor: "#ffffff",
+    backgroundColor:'orange',
     borderRadius: 8,
     marginBottom: 16,
     overflow: "hidden",
