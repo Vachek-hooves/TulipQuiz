@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   ImageBackground,
   StyleSheet,
@@ -15,22 +15,38 @@ import {
 import Land from '../../components/ui/icons/Land';
 import IconGoBack from '../../components/ui/icons/IconGoBack';
 import TotalScoreDisplay from '../../components/ui/interface/TotalScoreDisplay';
-import {tulipFarmData} from '../../data/tulipFarmData';
-import {useTulipContext} from '../../store/context';
+import { tulipFarmData } from '../../data/tulipFarmData';
+import { useTulipContext } from '../../store/context';
 
-const {width: screenWidth, height} = Dimensions.get('window');
-const GRID_SIZE = 2;
+const { width: screenWidth, height } = Dimensions.get('window');
+const GRID_SIZE = 3;
 const LAND_SIZE = screenWidth / GRID_SIZE;
 
 const TulipFarmScreen = () => {
   const [selectedLand, setSelectedLand] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const {getTotalScore, updateQuizScore, plantedTulips, updatePlantedTulips} =
-    useTulipContext();
+  const { getTotalScore, updateQuizScore, plantedTulips, updatePlantedTulips, growTulips } = useTulipContext();
+
+  const growTulipsCallback = useCallback(() => {
+    growTulips();
+  }, [growTulips]);
+
+  useEffect(() => {
+    const growthInterval = setInterval(() => {
+      growTulipsCallback();
+    }, 60000); // Check growth every minute
+
+    return () => clearInterval(growthInterval);
+  }, [growTulipsCallback]);
 
   const handleLandPress = index => {
-    setSelectedLand(index);
-    setModalVisible(true);
+    const tulip = plantedTulips[index];
+    if (tulip && tulip.scale >= 1.0) {
+      handleHarvest(index);
+    } else if (!tulip) {
+      setSelectedLand(index);
+      setModalVisible(true);
+    }
   };
 
   const handleTulipSelect = tulip => {
@@ -38,7 +54,7 @@ const TulipFarmScreen = () => {
     if (currentScore >= tulip.price) {
       updateQuizScore(1, currentScore - tulip.price);
       const newPlantedTulips = [...plantedTulips];
-      newPlantedTulips[selectedLand] = {...tulip, plantedAt: Date.now()};
+      newPlantedTulips[selectedLand] = { ...tulip, plantedAt: Date.now(), scale: 0.6 };
       updatePlantedTulips(newPlantedTulips);
       setModalVisible(false);
     } else {
@@ -48,8 +64,8 @@ const TulipFarmScreen = () => {
 
   const handleHarvest = index => {
     const tulip = plantedTulips[index];
-    if (tulip && Date.now() - tulip.plantedAt >= tulip.growthTime * 1000) {
-      const harvestValue = Math.floor(tulip.price * 1.5);
+    if (tulip && tulip.scale >= 1.0) {
+      const harvestValue = Math.floor(tulip.price * 1.2);
       updateQuizScore(1, getTotalScore() + harvestValue);
       const newPlantedTulips = [...plantedTulips];
       newPlantedTulips[index] = null;
@@ -57,7 +73,7 @@ const TulipFarmScreen = () => {
     }
   };
 
-  const renderTulipItem = ({item}) => (
+  const renderTulipItem = ({ item }) => (
     <TouchableOpacity
       style={styles.tulipItem}
       onPress={() => handleTulipSelect(item)}>
@@ -71,29 +87,31 @@ const TulipFarmScreen = () => {
     <ImageBackground
       source={require('../../assets/img/tulipGrow/grass.jpg')}
       style={styles.background}>
-      <SafeAreaView></SafeAreaView>
-      <View style={styles.header}>
-        <TotalScoreDisplay />
-      </View>
-      <ScrollView
-        // style={styles.farmGrid}
-        contentContainerStyle={styles.farmGrid}>
+      <SafeAreaView>
+        <View style={styles.header}>
+          <TotalScoreDisplay />
+        </View>
+      </SafeAreaView>
+      <ScrollView contentContainerStyle={styles.farmGrid}>
         {plantedTulips.map((tulip, index) => (
           <TouchableOpacity
             key={index}
-            onPress={() =>
-              tulip ? handleHarvest(index) : handleLandPress(index)
-            }
+            onPress={() => handleLandPress(index)}
             style={styles.landWrapper}>
             <Land style={styles.land}>
               {tulip && (
-                <Image source={tulip.image} style={styles.plantedTulip} />
+                <Image
+                  source={tulip.image}
+                  style={[
+                    styles.plantedTulip,
+                    { transform: [{ scale: tulip.scale }] },
+                  ]}
+                />
               )}
             </Land>
           </TouchableOpacity>
         ))}
       </ScrollView>
-      <View style={{height:100}}></View>
       <IconGoBack style={styles.backIcon} />
 
       <Modal

@@ -81,6 +81,19 @@ export const TulipProvider = ({ children }) => {
     }
   };
 
+  const growTulips = () => {
+    const newPlantedTulips = plantedTulips.map(tulip => {
+      if (tulip) {
+        const elapsedTime = (Date.now() - tulip.plantedAt) / (1000 * 60); // time in minutes
+        const growthStages = Math.min(Math.floor(elapsedTime / 0.1), 4); // 0.1 growth every 2 minutes, max 4 stages
+        const newScale = Math.min(0.6 + (growthStages * 0.1), 1.0);
+        return { ...tulip, scale: newScale };
+      }
+      return tulip;
+    });
+    updatePlantedTulips(newPlantedTulips);
+  };
+
   const value = {
     quizData,
     updateQuizScore,
@@ -89,6 +102,7 @@ export const TulipProvider = ({ children }) => {
     updateTotalScore,
     plantedTulips,
     updatePlantedTulips,
+    growTulips,
   };
 
   return (
