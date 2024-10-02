@@ -1,39 +1,52 @@
-import React, { useState, useEffect } from "react";
-import { ImageBackground, StyleSheet, View, Dimensions, TouchableOpacity, Modal, FlatList, Text, Image, SafeAreaView } from "react-native";
-import Land from '../../components/ui/icons/Land';  
+import React, {useState, useEffect} from 'react';
+import {
+  ImageBackground,
+  StyleSheet,
+  View,
+  Dimensions,
+  TouchableOpacity,
+  Modal,
+  FlatList,
+  Text,
+  Image,
+  SafeAreaView,
+  ScrollView,
+} from 'react-native';
+import Land from '../../components/ui/icons/Land';
 import IconGoBack from '../../components/ui/icons/IconGoBack';
 import TotalScoreDisplay from '../../components/ui/interface/TotalScoreDisplay';
-import { tulipFarmData } from '../../data/tulipFarmData';
-import { useTulipContext } from '../../store/context';
+import {tulipFarmData} from '../../data/tulipFarmData';
+import {useTulipContext} from '../../store/context';
 
-const { width: screenWidth,height } = Dimensions.get('window');
-const GRID_SIZE = 3;
+const {width: screenWidth, height} = Dimensions.get('window');
+const GRID_SIZE = 2;
 const LAND_SIZE = screenWidth / GRID_SIZE;
 
 const TulipFarmScreen = () => {
   const [selectedLand, setSelectedLand] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const { getTotalScore, updateQuizScore, plantedTulips, updatePlantedTulips } = useTulipContext();
+  const {getTotalScore, updateQuizScore, plantedTulips, updatePlantedTulips} =
+    useTulipContext();
 
-  const handleLandPress = (index) => {
+  const handleLandPress = index => {
     setSelectedLand(index);
     setModalVisible(true);
   };
 
-  const handleTulipSelect = (tulip) => {
+  const handleTulipSelect = tulip => {
     const currentScore = getTotalScore();
     if (currentScore >= tulip.price) {
       updateQuizScore(1, currentScore - tulip.price);
       const newPlantedTulips = [...plantedTulips];
-      newPlantedTulips[selectedLand] = { ...tulip, plantedAt: Date.now() };
+      newPlantedTulips[selectedLand] = {...tulip, plantedAt: Date.now()};
       updatePlantedTulips(newPlantedTulips);
       setModalVisible(false);
     } else {
-      alert("Not enough points to buy this tulip!");
+      alert('Not enough points to buy this tulip!');
     }
   };
 
-  const handleHarvest = (index) => {
+  const handleHarvest = index => {
     const tulip = plantedTulips[index];
     if (tulip && Date.now() - tulip.plantedAt >= tulip.growthTime * 1000) {
       const harvestValue = Math.floor(tulip.price * 1.5);
@@ -44,8 +57,10 @@ const TulipFarmScreen = () => {
     }
   };
 
-  const renderTulipItem = ({ item }) => (
-    <TouchableOpacity style={styles.tulipItem} onPress={() => handleTulipSelect(item)}>
+  const renderTulipItem = ({item}) => (
+    <TouchableOpacity
+      style={styles.tulipItem}
+      onPress={() => handleTulipSelect(item)}>
       <Image source={item.image} style={styles.tulipImage} />
       <Text>{item.name}</Text>
       <Text>Price: {item.price}</Text>
@@ -53,44 +68,50 @@ const TulipFarmScreen = () => {
   );
 
   return (
-    <ImageBackground source={require('../../assets/img/tulipGrow/grass.jpg')} style={styles.background}>
+    <ImageBackground
+      source={require('../../assets/img/tulipGrow/grass.jpg')}
+      style={styles.background}>
       <SafeAreaView></SafeAreaView>
       <View style={styles.header}>
         <TotalScoreDisplay />
       </View>
-      <View style={styles.farmGrid}>
+      <ScrollView
+        // style={styles.farmGrid}
+        contentContainerStyle={styles.farmGrid}>
         {plantedTulips.map((tulip, index) => (
-          <TouchableOpacity 
-            key={index} 
-            onPress={() => tulip ? handleHarvest(index) : handleLandPress(index)}
-            style={styles.landWrapper}
-          >
+          <TouchableOpacity
+            key={index}
+            onPress={() =>
+              tulip ? handleHarvest(index) : handleLandPress(index)
+            }
+            style={styles.landWrapper}>
             <Land style={styles.land}>
-              {tulip && <Image source={tulip.image} style={styles.plantedTulip} />}
+              {tulip && (
+                <Image source={tulip.image} style={styles.plantedTulip} />
+              )}
             </Land>
           </TouchableOpacity>
         ))}
-      </View>
+      </ScrollView>
+      <View style={{height:100}}></View>
       <IconGoBack style={styles.backIcon} />
 
       <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
+        onRequestClose={() => setModalVisible(false)}>
         <View style={styles.modalView}>
           <Text>Select a tulip to plant:</Text>
           <FlatList
             data={tulipFarmData}
             renderItem={renderTulipItem}
-            keyExtractor={(item) => item.id.toString()}
+            keyExtractor={item => item.id.toString()}
             numColumns={2}
           />
           <TouchableOpacity
             style={styles.closeButton}
-            onPress={() => setModalVisible(false)}
-          >
+            onPress={() => setModalVisible(false)}>
             <Text>Close</Text>
           </TouchableOpacity>
         </View>
@@ -118,11 +139,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexWrap: 'wrap',
     width: screenWidth,
-    height: screenWidth,
+    height: height+120,
   },
   land: {
-    width: LAND_SIZE,
-    height: LAND_SIZE,
+    width: LAND_SIZE -30,
+    height: LAND_SIZE -30,
     // transform: [{rotate: '45deg'}]
   },
   backIcon: {
@@ -132,14 +153,14 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
+    alignItems: 'center',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
@@ -149,7 +170,7 @@ const styles = StyleSheet.create({
     top: 50,
     left: 20,
     right: 20,
-    height:height*0.8
+    height: height * 0.8,
   },
   tulipItem: {
     margin: 10,
