@@ -6,23 +6,25 @@ import { useTulipContext } from "../../store/context";
 
 const QuizWelcomeScreen = () => {
   const navigation = useNavigation();
-  const { quizData, getTotalScore, unlockQuiz } = useTulipContext();
+  const { quizData, getTotalScore, unlockQuiz, updateTotalScore } = useTulipContext();
   const [unlockedQuizId, setUnlockedQuizId] = useState(null);
   const [totalScore, setTotalScore] = useState(0);
 
   useEffect(() => {
     setTotalScore(getTotalScore());
-  }, [getTotalScore]);
+  }, [getTotalScore, quizData]); // Add quizData as a dependency
 
   const handleQuizPress = (quizId) => {
     navigation.navigate("QuizGameScreen", { quizId });
   };
 
-  const handleUnlockQuiz = (quizId) => {
+  const handleUnlockQuiz = async (quizId) => {
     if (totalScore >= 150) {
-      unlockQuiz(quizId);
+      await unlockQuiz(quizId);
       setUnlockedQuizId(quizId);
-      setTotalScore(prevScore => prevScore - 150);
+      const newTotalScore = totalScore - 150;
+      setTotalScore(newTotalScore);
+      await updateTotalScore(newTotalScore);
       Alert.alert("Quiz Unlocked!", "You've successfully unlocked this quiz.");
     } else {
       Alert.alert("Not Enough Points", `You need 150 points to unlock this quiz. Current score: ${totalScore}`);
