@@ -6,7 +6,7 @@ export const TulipContext = createContext({});
 
 export const TulipProvider = ({ children }) => {
   const [quizData, setQuizData] = useState(null);
-  const [plantedTulips, setPlantedTulips] = useState(Array(9).fill(null));
+  const [plantedTulips, setPlantedTulips] = useState(Array(12).fill(null));
 
   useEffect(() => {
     const loadData = async () => {

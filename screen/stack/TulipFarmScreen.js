@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
   ImageBackground,
   StyleSheet,
@@ -15,17 +15,23 @@ import {
 import Land from '../../components/ui/icons/Land';
 import IconGoBack from '../../components/ui/icons/IconGoBack';
 import TotalScoreDisplay from '../../components/ui/interface/TotalScoreDisplay';
-import { tulipFarmData } from '../../data/tulipFarmData';
-import { useTulipContext } from '../../store/context';
+import {tulipFarmData} from '../../data/tulipFarmData';
+import {useTulipContext} from '../../store/context';
 
-const { width: screenWidth, height } = Dimensions.get('window');
+const {width: screenWidth, height} = Dimensions.get('window');
 const GRID_SIZE = 3;
 const LAND_SIZE = screenWidth / GRID_SIZE;
 
 const TulipFarmScreen = () => {
   const [selectedLand, setSelectedLand] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const { getTotalScore, updateQuizScore, plantedTulips, updatePlantedTulips, growTulips } = useTulipContext();
+  const {
+    getTotalScore,
+    updateQuizScore,
+    plantedTulips,
+    updatePlantedTulips,
+    growTulips,
+  } = useTulipContext();
 
   const growTulipsCallback = useCallback(() => {
     growTulips();
@@ -34,7 +40,7 @@ const TulipFarmScreen = () => {
   useEffect(() => {
     const growthInterval = setInterval(() => {
       growTulipsCallback();
-    }, 60000); // Check growth every minute
+    }, 2000); // Check growth every ...
 
     return () => clearInterval(growthInterval);
   }, [growTulipsCallback]);
@@ -54,7 +60,11 @@ const TulipFarmScreen = () => {
     if (currentScore >= tulip.price) {
       updateQuizScore(1, currentScore - tulip.price);
       const newPlantedTulips = [...plantedTulips];
-      newPlantedTulips[selectedLand] = { ...tulip, plantedAt: Date.now(), scale: 0.6 };
+      newPlantedTulips[selectedLand] = {
+        ...tulip,
+        plantedAt: Date.now(),
+        scale: 0.6,
+      };
       updatePlantedTulips(newPlantedTulips);
       setModalVisible(false);
     } else {
@@ -73,14 +83,14 @@ const TulipFarmScreen = () => {
     }
   };
 
-  const calculateGrowthProgress = (tulip) => {
+  const calculateGrowthProgress = tulip => {
     if (!tulip) return 0;
     const elapsedTime = (Date.now() - tulip.plantedAt) / (1000 * 60); // time in minutes
     const growthProgress = Math.min(elapsedTime / 8, 1); // 8 minutes to fully grow (4 stages * 2 minutes)
     return growthProgress;
   };
 
-  const renderTulipItem = ({ item }) => (
+  const renderTulipItem = ({item}) => (
     <TouchableOpacity
       style={styles.tulipItem}
       onPress={() => handleTulipSelect(item)}>
@@ -105,13 +115,15 @@ const TulipFarmScreen = () => {
             key={index}
             onPress={() => handleLandPress(index)}
             style={styles.landWrapper}>
-            <Land style={styles.land} growthProgress={calculateGrowthProgress(tulip)}>
+            <Land
+              style={styles.land}
+              growthProgress={calculateGrowthProgress(tulip)}>
               {tulip && (
                 <Image
                   source={tulip.image}
                   style={[
                     styles.plantedTulip,
-                    { transform: [{ scale: tulip.scale }] },
+                    {transform: [{scale: tulip.scale}]},
                   ]}
                 />
               )}
@@ -164,11 +176,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexWrap: 'wrap',
     width: screenWidth,
-    height: height+120,
+    height: height * 0.8,
   },
   land: {
-    width: LAND_SIZE -30,
-    height: LAND_SIZE -30,
+    width: LAND_SIZE - 30,
+    height: LAND_SIZE - 30,
     // transform: [{rotate: '45deg'}]
   },
   backIcon: {
