@@ -73,6 +73,13 @@ const TulipFarmScreen = () => {
     }
   };
 
+  const calculateGrowthProgress = (tulip) => {
+    if (!tulip) return 0;
+    const elapsedTime = (Date.now() - tulip.plantedAt) / (1000 * 60); // time in minutes
+    const growthProgress = Math.min(elapsedTime / 8, 1); // 8 minutes to fully grow (4 stages * 2 minutes)
+    return growthProgress;
+  };
+
   const renderTulipItem = ({ item }) => (
     <TouchableOpacity
       style={styles.tulipItem}
@@ -98,7 +105,7 @@ const TulipFarmScreen = () => {
             key={index}
             onPress={() => handleLandPress(index)}
             style={styles.landWrapper}>
-            <Land style={styles.land}>
+            <Land style={styles.land} growthProgress={calculateGrowthProgress(tulip)}>
               {tulip && (
                 <Image
                   source={tulip.image}
