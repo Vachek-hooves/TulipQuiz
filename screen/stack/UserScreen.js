@@ -186,8 +186,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   userName: {
-    fontSize: 32,
-    fontWeight: 'bold',
+    fontSize: 46,
+    fontWeight: '800',
+    letterSpacing: 1,
+    
   },
   inputContainer: {
     width: '100%',
