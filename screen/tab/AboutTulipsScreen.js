@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, ImageBackground, ScrollView }
 import { useNavigation } from "@react-navigation/native";
 import TabLayout from "../../components/ScreenLayout/TabLayout";
 import LinearGradient from 'react-native-linear-gradient';
-
+import UserIcon from "../../components/ui/icons/UserIcon";
 const AboutTulipsScreen = () => {
   const navigation = useNavigation();
 
@@ -19,6 +19,7 @@ const AboutTulipsScreen = () => {
         // source={require('../../assets/img/tulipGrow/tulip_field_background.jpg')}
         style={styles.background}
       >
+        <UserIcon/>
         <ScrollView contentContainerStyle={styles.container}>
           <Text style={styles.title}>Discover Tulips</Text>
           <Text style={styles.subtitle}>Explore the world of these beautiful flowers</Text>
