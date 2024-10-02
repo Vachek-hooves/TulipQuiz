@@ -7,13 +7,15 @@ export const TulipContext = createContext({});
 export const TulipProvider = ({ children }) => {
   const [quizData, setQuizData] = useState(null);
   const [plantedTulips, setPlantedTulips] = useState(Array(12).fill(null));
+  const [totalScore, setTotalScore] = useState(0); // Add this line
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [storedQuizData, storedPlantedTulips] = await Promise.all([
+        const [storedQuizData, storedPlantedTulips, storedTotalScore] = await Promise.all([
           AsyncStorage.getItem('TulipQuiz'),
-          AsyncStorage.getItem('PlantedTulips')
+          AsyncStorage.getItem('PlantedTulips'),
+          AsyncStorage.getItem('TotalScore') // Add this line
         ]);
 
         if (storedQuizData !== null) {
@@ -26,9 +28,14 @@ export const TulipProvider = ({ children }) => {
         if (storedPlantedTulips !== null) {
           setPlantedTulips(JSON.parse(storedPlantedTulips));
         }
+
+        if (storedTotalScore !== null) {
+          setTotalScore(JSON.parse(storedTotalScore));
+        }
       } catch (error) {
         console.error('Error loading data:', error);
         setQuizData(TulipQuiz);
+        setTotalScore(0); // Set default total score
       }
     };
 
@@ -48,23 +55,16 @@ export const TulipProvider = ({ children }) => {
   };
 
   const updateTotalScore = async (newScore) => {
-    const updatedQuizData = quizData.map((quiz, index) => 
-      index === 0 ? { ...quiz, levelScore: newScore } : quiz
-    );
-    setQuizData(updatedQuizData);
+    setTotalScore(newScore);
     try {
-      await AsyncStorage.setItem('TulipQuiz', JSON.stringify(updatedQuizData));
+      await AsyncStorage.setItem('TotalScore', JSON.stringify(newScore));
     } catch (error) {
-      console.error('Error saving updated quiz data:', error);
+      console.error('Error saving updated total score:', error);
     }
   };
 
   const getTotalScore = () => {
-    if (!quizData) return 0;
-    return quizData.reduce((total, quiz) => {
-      const score = Number(quiz.levelScore) || 0;
-      return total + score;
-    }, 0);
+    return totalScore;
   };
 
   const getMaxPossibleScore = () => {

@@ -10,7 +10,7 @@ const { width } = Dimensions.get('window');
 
 const QuizGameScreen = ({ route, navigation }) => {
   const { quizId } = route.params;
-  const { quizData, updateQuizScore, unlockQuiz } = useTulipContext();
+  const { quizData, updateQuizScore, unlockQuiz, getTotalScore, updateTotalScore } = useTulipContext();
   const [currentQuiz, setCurrentQuiz] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -53,6 +53,11 @@ const QuizGameScreen = ({ route, navigation }) => {
         setShowResult(true);
         const finalScore = score + (isCorrect ? 10 : 0);
         updateQuizScore(quizId, finalScore);
+        
+        // Update total score
+        const currentTotalScore = getTotalScore();
+        const newTotalScore = currentTotalScore + finalScore;
+        updateTotalScore(newTotalScore);
         
         // Check if more than 9 questions were answered correctly
         if (correctAnswers + (isCorrect ? 1 : 0) > 9) {

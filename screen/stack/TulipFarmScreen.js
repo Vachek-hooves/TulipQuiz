@@ -27,7 +27,7 @@ const TulipFarmScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const {
     getTotalScore,
-    updateQuizScore,
+    updateTotalScore, // Use this instead of updateQuizScore
     plantedTulips,
     updatePlantedTulips,
     growTulips,
@@ -58,7 +58,7 @@ const TulipFarmScreen = () => {
   const handleTulipSelect = tulip => {
     const currentScore = getTotalScore();
     if (currentScore >= tulip.price) {
-      updateQuizScore(1, currentScore - tulip.price);
+      updateTotalScore(currentScore - tulip.price);
       const newPlantedTulips = [...plantedTulips];
       newPlantedTulips[selectedLand] = {
         ...tulip,
@@ -76,7 +76,7 @@ const TulipFarmScreen = () => {
     const tulip = plantedTulips[index];
     if (tulip && tulip.scale >= 1.0) {
       const harvestValue = Math.floor(tulip.price * 1.2);
-      updateQuizScore(1, getTotalScore() + harvestValue);
+      updateTotalScore(getTotalScore() + harvestValue);
       const newPlantedTulips = [...plantedTulips];
       newPlantedTulips[index] = null;
       updatePlantedTulips(newPlantedTulips);
