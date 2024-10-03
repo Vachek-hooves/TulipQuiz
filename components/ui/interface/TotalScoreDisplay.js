@@ -10,7 +10,7 @@ const TotalScoreDisplay = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Total Score: {totalScore} / {maxScore}</Text>
+      <Text style={styles.text}>Total Score: {totalScore} </Text>
     </View>
   );
 };
